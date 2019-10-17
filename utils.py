@@ -1,9 +1,18 @@
+import os
+import shutil
+import urllib.error
+import urllib.request
 
 import matplotlib.pyplot as plt
 import matplotlib.style as style
+import multiprocessing
+
 import numpy as np
 import pandas as pd
 import tensorflow as tf
+
+from joblib import Parallel, delayed
+from time import time
 
 
 def micro_bce(y, y_hat):
@@ -191,3 +200,40 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
         'f1':f1s})
     
     return grid
+
+
+def download_parallel(filenames, urls, image_dir):
+    """Downloads images from internet.
+    
+    Args:
+        filenames (list of strings): path to downloaded files
+        urls (list of strings): image urls
+        image_dir (string): path to destination directory
+    """
+
+    # Init
+    start = time()
+
+    # Create destination directory
+    if os.path.exists(image_dir):
+        print("Directory {} already exists and will be deleted.".format(image_dir))
+        shutil.rmtree(image_dir)
+    print("Created new directory {}".format(image_dir))
+    os.makedirs(image_dir)
+    
+    # Define function to download one single image
+    def download_image(url, filename):
+        try:
+            urllib.request.urlretrieve(url, filename)
+            return 0
+        except:
+            return 1
+    
+    # Download images in parallel
+    print("\nDownloading...")
+    num_cores = multiprocessing.cpu_count()
+    ko = Parallel(n_jobs=num_cores)(delayed(download_image)(u, f) for f, u in zip(filenames, urls))
+    
+    print("\nDownload in parallel mode took %d seconds." %(time()-start))
+    print("Number of downloaded images:", len([i for i in ko if i==0]))
+    print("Number of images not downloaded:", len([i for i in ko if i==1]))
