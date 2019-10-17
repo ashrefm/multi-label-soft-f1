@@ -237,3 +237,43 @@ def download_parallel(filenames, urls, image_dir):
     print("\nDownload in parallel mode took %d seconds." %(time()-start))
     print("Number of downloaded images:", len([i for i in ko if i==0]))
     print("Number of images not downloaded:", len([i for i in ko if i==1]))
+    
+    
+def download_sequential(filenames, urls, image_dir):
+    """Downloads images from internet.
+    
+    Args:
+        filenames (list of strings): path to downloaded files
+        urls (list of strings): image urls
+        image_dir (string): path to destination directory
+    """
+
+    # Init
+    start = time()
+
+    # Create destination directory
+    if os.path.exists(image_dir):
+        print("Directory {} already exists and will be deleted.".format(image_dir))
+        shutil.rmtree(image_dir)
+    print("Created new directory {}".format(image_dir))
+    os.makedirs(image_dir)
+    
+    # Define function to download one single image
+    def download_image(image_path, filename):
+        urllib.request.urlretrieve(image_path, filename)
+    
+    # Download images sequentially
+    print("\nDownloading...")
+    ko = 0
+    for i in tqdm(range(len(filenames))):
+        try:
+            filename = filenames[i]
+            url = urls[i]
+            download_image(url, filename)
+        except:
+            ko +=1
+            pass
+    
+    print("\nDownload in sequential mode took %d seconds." %(time()-start))
+    print("Number of downloaded images:", (len(filenames)-ko))
+    print("Number of images not downloaded:", ko)
