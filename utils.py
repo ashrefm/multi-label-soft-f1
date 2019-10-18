@@ -203,7 +203,7 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
 
 
 def download_parallel(filenames, urls, image_dir):
-    """Downloads images from internet.
+    """Downloads images from Internet in parallel.
     
     Args:
         filenames (list of strings): path to downloaded files
@@ -227,20 +227,22 @@ def download_parallel(filenames, urls, image_dir):
             urllib.request.urlretrieve(url, filename)
             return 0
         except:
-            return 1
+            return os.path.basename(filename).split('.')[0]
     
     # Download images in parallel
     print("\nDownloading...")
     num_cores = multiprocessing.cpu_count()
-    ko = Parallel(n_jobs=num_cores)(delayed(download_image)(u, f) for f, u in zip(filenames, urls))
+    ko_list = Parallel(n_jobs=num_cores)(delayed(download_image)(u, f) for f, u in zip(filenames, urls))
     
     print("\nDownload in parallel mode took %d seconds." %(time()-start))
-    print("Number of downloaded images:", len([i for i in ko if i==0]))
-    print("Number of images not downloaded:", len([i for i in ko if i==1]))
+    print("Success:", len([i for i in ko_list if i==0]))
+    print("Errors:", len([i for i in ko_list if i!=0]))
     
+    return ko_list
     
+
 def download_sequential(filenames, urls, image_dir):
-    """Downloads images from internet.
+    """Downloads images from Internet sequentially.
     
     Args:
         filenames (list of strings): path to downloaded files
@@ -264,16 +266,19 @@ def download_sequential(filenames, urls, image_dir):
     
     # Download images sequentially
     print("\nDownloading...")
-    ko = 0
+    ko_list = []
     for i in tqdm(range(len(filenames))):
         try:
             filename = filenames[i]
             url = urls[i]
             download_image(url, filename)
         except:
-            ko +=1
+            img_id = os.path.basename(filename).split('.')[0]
+            ko_list.append(img_id)
             pass
     
     print("\nDownload in sequential mode took %d seconds." %(time()-start))
-    print("Number of downloaded images:", (len(filenames)-ko))
-    print("Number of images not downloaded:", ko)
+    print("Success:", (len(filenames)-len(ko_list)))
+    print("Errors:", len(ko_list))
+    
+    return ko_list
