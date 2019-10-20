@@ -13,6 +13,7 @@ import tensorflow as tf
 
 from joblib import Parallel, delayed
 from time import time
+from tqdm import tqdm
 
 
 def micro_bce(y, y_hat):
@@ -202,23 +203,27 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
     return grid
 
 
-def download_parallel(filenames, urls, image_dir):
+def download_parallel(movies, image_dir):
     """Downloads images from Internet in parallel.
     
     Args:
-        filenames (list of strings): path to downloaded files
-        urls (list of strings): image urls
+        movies (dataframe): must contain 'imdbId' and 'Poster' url columns
         image_dir (string): path to destination directory
+    
+    Returns:
+        movies (dataframe): input dataframe without posters that failed to download
     """
-
-    # Init
-    start = time()
+    
+    # Create list of filenames
+    filenames = movies['imdbId'].apply(lambda imbdId : os.path.join(image_dir, str(imbdId)+'.jpg'))
+    # Create list of image urls
+    urls = movies['Poster']
 
     # Create destination directory
     if os.path.exists(image_dir):
-        print("Directory {} already exists and will be deleted.".format(image_dir))
+        print("Directory '{}' already exists and will be deleted.".format(image_dir))
         shutil.rmtree(image_dir)
-    print("Created new directory {}".format(image_dir))
+    print("Created new directory '{}'".format(image_dir))
     os.makedirs(image_dir)
     
     # Define function to download one single image
@@ -230,6 +235,7 @@ def download_parallel(filenames, urls, image_dir):
             return os.path.basename(filename).split('.')[0]
     
     # Download images in parallel
+    start = time()
     print("\nDownloading...")
     num_cores = multiprocessing.cpu_count()
     ko_list = Parallel(n_jobs=num_cores)(delayed(download_image)(u, f) for f, u in zip(filenames, urls))
@@ -238,26 +244,34 @@ def download_parallel(filenames, urls, image_dir):
     print("Success:", len([i for i in ko_list if i==0]))
     print("Errors:", len([i for i in ko_list if i!=0]))
     
-    return ko_list
+    # Remove not downloaded posters from the dataframe
+    ko_index = movies[movies['imdbId'].isin(ko_list)].index
+    movies = movies.drop(ko_index)
+    
+    return movies
     
 
-def download_sequential(filenames, urls, image_dir):
+def download_sequential(movies, image_dir):
     """Downloads images from Internet sequentially.
     
     Args:
-        filenames (list of strings): path to downloaded files
-        urls (list of strings): image urls
+        movies (dataframe): must contain 'imdbId' and 'Poster' columns
         image_dir (string): path to destination directory
+        
+    Returns:
+        movies (dataframe): input dataframe without posters that failed to download
     """
-
-    # Init
-    start = time()
+    
+    # Create list of filenames
+    filenames = movies['imdbId'].apply(lambda imbdId : os.path.join(image_dir, str(imbdId)+'.jpg'))
+    # Create list of image urls
+    urls = movies['Poster']
 
     # Create destination directory
     if os.path.exists(image_dir):
-        print("Directory {} already exists and will be deleted.".format(image_dir))
+        print("Directory '{}' already exists and will be deleted.".format(image_dir))
         shutil.rmtree(image_dir)
-    print("Created new directory {}".format(image_dir))
+    print("Created new directory '{}'".format(image_dir))
     os.makedirs(image_dir)
     
     # Define function to download one single image
@@ -265,12 +279,13 @@ def download_sequential(filenames, urls, image_dir):
         urllib.request.urlretrieve(image_path, filename)
     
     # Download images sequentially
+    start = time()
     print("\nDownloading...")
     ko_list = []
     for i in tqdm(range(len(filenames))):
+        filename = filenames.iloc[i]
+        url = urls.iloc[i]
         try:
-            filename = filenames[i]
-            url = urls[i]
             download_image(url, filename)
         except:
             img_id = os.path.basename(filename).split('.')[0]
@@ -281,4 +296,8 @@ def download_sequential(filenames, urls, image_dir):
     print("Success:", (len(filenames)-len(ko_list)))
     print("Errors:", len(ko_list))
     
-    return ko_list
+    # Remove not downloaded posters from the dataframe
+    ko_index = movies[movies['imdbId'].isin(ko_list)].index
+    movies = movies.drop(ko_index)
+    
+    return movies
