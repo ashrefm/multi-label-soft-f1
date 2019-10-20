@@ -115,20 +115,22 @@ def learning_curves(history):
 
     macro_f1 = history.history['macro_f1']
     val_macro_f1 = history.history['val_macro_f1']
+    
+    epochs = len(loss)
 
     style.use("bmh")
     plt.figure(figsize=(8, 8))
 
     plt.subplot(2, 1, 1)
-    plt.plot(loss, label='Training Loss')
-    plt.plot(val_loss, label='Validation Loss')
+    plt.plot(range(1, epochs+1), loss, label='Training Loss')
+    plt.plot(range(1, epochs+1), val_loss, label='Validation Loss')
     plt.legend(loc='upper right')
     plt.ylabel('Loss')
     plt.title('Training and Validation Loss')
 
     plt.subplot(2, 1, 2)
-    plt.plot(macro_f1, label='Training Macro-F1')
-    plt.plot(val_macro_f1, label='Validation Macro-F1')
+    plt.plot(range(1, epochs+1), macro_f1, label='Training Macro-F1')
+    plt.plot(range(1, epochs+1), val_macro_f1, label='Validation Macro-F1')
     plt.legend(loc='lower right')
     plt.ylabel('Macro-F1')
     plt.title('Training and Validation Macro-F1')
