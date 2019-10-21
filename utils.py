@@ -143,8 +143,8 @@ def learning_curves(history):
 
 def perf_grid(ds, target, class_names, model, n_thresh=100):
     """Computes the performance table containing target, label names,
-    thresholds between 0 and 1, number of tp, fp, fn, precision,
-    recall and f-score metrics for each class.
+    class frequencies, thresholds between 0 and 1, number of tp, fp, fn,
+    precision, recall and f-score metrics for each class.
     
     Args:
         ds (tf.data.Datatset): contains the features array
@@ -164,16 +164,17 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
     # Find class frequencies in the validation set
     class_freq = target.sum(axis=0)
     # Get class indexes
-    classes = [i for i in range(len(class_names))]
+    class_index = [i for i in range(len(class_names))]
     # Define thresholds
     thresholds = np.linspace(0,1,n_thresh+1).astype(np.float32)
     
     # Compute all metrics for all classes
-    targets, labels, tps, fps, fns, precisions, recalls, f1s = [], [], [], [], [], [], [], []
-    for c in classes:
+    classes, labels, freqs, tps, fps, fns, precisions, recalls, f1s = [], [], [], [], [], [], [], [], []
+    for c in class_index:
         for thresh in thresholds:   
-            targets.append(c)
+            classes.append(c)
             labels.append(class_names[c])
+            freqs.append(round(class_freq[c]/len(y_val),2))
             y_hat = y_hat_val[:,c]
             y = y_val[:,c]
             y_pred = y_hat > thresh
@@ -192,15 +193,19 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
             
     # Create the performance dataframe
     grid = pd.DataFrame({
-        'target':targets,
+        'class':classes,
         'label':labels,
-        'threshold':list(thresholds)*len(classes),
+        'freq': freqs,
+        'threshold':list(thresholds)*len(class_index),
         'tp':tps,
         'fp':fps,
         'fn':fns,
         'precision':precisions,
         'recall':recalls,
         'f1':f1s})
+    
+    grid = grid[['class', 'label', 'freq', 'threshold',
+                 'tp', 'fn', 'fp', 'precision', 'recall', 'f1']]
     
     return grid
 
