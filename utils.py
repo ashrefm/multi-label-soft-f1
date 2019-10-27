@@ -1,3 +1,20 @@
+# MIT License
+# Copyright (c) 2019 Mohamed-Achref MAIZA
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated
+# documentation files (the "Software"), to deal in the Software without restriction, including without limitation the
+# rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit
+# persons to whom the Software is furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all copies or substantial portions of the
+# Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE
+# WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+# COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR
+# OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE
+
+
 import os
 import shutil
 import urllib.error
@@ -21,10 +38,10 @@ def micro_bce(y, y_hat):
     
     Args:
         y (int32 Tensor): labels array of shape (BATCH_SIZE, N_CLASSES)      
-        y_hat (float32 Tensor): prediction output from forward propagation of shape (BATCH_SIZE, N_CLASSES)
+        y_hat (float32 Tensor): probability matrix output from forward propagation of shape (BATCH_SIZE, N_CLASSES)
         
     Returns:
-        cost (scalar Tensor): batch cost value
+        cost (scalar Tensor): value of the cost function for the batch
     """
     # Convert the target array to float32
     y = tf.cast(y, tf.float32)
@@ -40,10 +57,10 @@ def macro_bce(y, y_hat):
     
     Args:
         y (int32 Tensor): labels array of shape (BATCH_SIZE, N_CLASSES)      
-        y_hat (float32 Tensor): prediction output from forward propagation of shape (BATCH_SIZE, N_CLASSES)
+        y_hat (float32 Tensor): probability matrix from forward propagation of shape (BATCH_SIZE, N_CLASSES)
         
     Returns:
-        cost (scalar Tensor): batch cost value
+        cost (scalar Tensor): value of the cost function for the batch
     """
     # Convert the target array to float32
     y = tf.cast(y, tf.float32)
@@ -62,10 +79,10 @@ def macro_soft_f1_loss(y, y_hat):
     
     Args:
         y (int32 Tensor): labels array of shape (BATCH_SIZE, N_CLASSES)
-        y_hat (float32 Tensor): prediction output from forward propagation of shape (BATCH_SIZE, N_CLASSES)
+        y_hat (float32 Tensor): probability matrix from forward propagation of shape (BATCH_SIZE, N_CLASSES)
         
     Returns:
-        cost (scalar Tensor): batch cost value
+        cost (scalar Tensor): value of the cost function for the batch
     """
     y = tf.cast(y, tf.float32)
     y_hat = tf.cast(y_hat, tf.float32)
@@ -85,11 +102,11 @@ def macro_f1(y, y_hat, thresh=0.5):
     
     Args:
         y (int32 Tensor): labels array of shape (BATCH_SIZE, N_CLASSES)
-        y_hat (float32 Tensor): prediction output from forward propagation of shape (BATCH_SIZE, N_CLASSES)
+        y_hat (float32 Tensor): probability matrix from forward propagation of shape (BATCH_SIZE, N_CLASSES)
         thresh: probability value beyond which we predict positive
         
     Returns:
-        macro_f1 (scalar Tensor): value of macro F1 in batch
+        macro_f1 (scalar Tensor): value of macro F1 for the batch
     """
     y_pred = tf.cast(tf.greater(y_hat, thresh), tf.float32)
     TP = tf.cast(tf.math.count_nonzero(y_pred * y, axis=0), tf.float32)
