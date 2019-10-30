@@ -147,11 +147,11 @@ def learning_curves(history):
     plt.title('Training and Validation Loss')
 
     plt.subplot(2, 1, 2)
-    plt.plot(range(1, epochs+1), macro_f1, label='Training Macro-F1')
-    plt.plot(range(1, epochs+1), val_macro_f1, label='Validation Macro-F1')
+    plt.plot(range(1, epochs+1), macro_f1, label='Training Macro F1-score')
+    plt.plot(range(1, epochs+1), val_macro_f1, label='Validation Macro F1-score')
     plt.legend(loc='lower right')
-    plt.ylabel('Macro-F1')
-    plt.title('Training and Validation Macro-F1')
+    plt.ylabel('Macro F1-score')
+    plt.title('Training and Validation Macro F1-score')
     plt.xlabel('epoch')
 
     plt.show()
