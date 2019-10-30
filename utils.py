@@ -93,7 +93,7 @@ def macro_soft_f1_loss(y, y_hat):
     precision = TP / (TP + FP + 1e-16)
     recall = TP / (TP + FN + 1e-16)
     soft_f1 = 2 * precision * recall / (precision + recall + 1e-16)
-    cost = 1 - soft_f1 # reduce 1-f1 in order to increase f1
+    cost = 1 - soft_f1 # reduce 1 - soft-F1 in order to increase soft-F1
     macro_cost = tf.reduce_mean(cost)
     return macro_cost
 
