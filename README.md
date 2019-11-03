@@ -1,7 +1,8 @@
 # Overview
-This is a tutorial illustrating how to build and train a machine learning system for multi-label image classification with TensorFlow 2.0.  
-For example, can we predict the genre of a movie just from its poster ? We will be using a movie poster dataset hosted on Kaggle.  
-Given an image of a movie poster, the model should predict one or many correct labels (Action, Romance, Drama, etc.).  
+This is a tutorial illustrating how to build and train a machine learning system for multi-label image classification with TensorFlow 2.0.
+
+For example, can we predict the genre of a movie just from its poster ? We will be using a movie poster dataset hosted on Kaggle. Given an image of a movie poster, the model should predict one or many correct labels (Action, Romance, Drama, etc.).
+
 We can download a pre-trained feature extractor from TensorFlow Hub and attach a multi-headed dense neural network to generate a probability score for each class independently.
 
 The model is trained in two ways: the classic "binary cross-entropy" loss is compared to a custom "macro soft-F1" loss designed to optimize directly the "macro F1-score". The benefits of the second method are demonstrated to be quite interesting.
