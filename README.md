@@ -13,8 +13,7 @@ Please, check these two blog posts for a full description:
 
 
 # Install
-The required Python packages for executing the scripts in this repository are listed in `requirements.txt` and `requirements_gpu.txt`.  
-We recommand using Python >= 3.5 and the standard virtualenv tool.  
+The required Python packages for executing the scripts in this repository are listed in `requirements.txt` and `requirements_gpu.txt`. We recommand using Python >= 3.5 and the standard virtualenv tool.  
 
 You may need to ugrade the Python package manager pip before installing the required packages:
 ```
