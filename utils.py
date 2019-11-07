@@ -166,7 +166,7 @@ def perf_grid(ds, target, class_names, model, n_thresh=100):
     
     Args:
         ds (tf.data.Datatset): contains the features array
-        target (numpy array): target matrix of shape
+        target (numpy array): target matrix of shape (BATCH_SIZE, N_CLASSES)
         class_names (list of strings): column names in target matrix
         model (tensorflow keras model): model to use for prediction
         n_thresh (int) : number of thresholds to try
