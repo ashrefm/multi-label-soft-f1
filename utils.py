@@ -326,3 +326,16 @@ def download_sequential(movies, image_dir):
     movies = movies.drop(ko_index)
     
     return movies
+
+
+def print_time(t):
+    """Function that converts time period in seconds into %h:%m:%s expression.
+    Args:
+        t (int): time period in seconds
+    Returns:
+        s (string): time period formatted
+    """
+    h = t//3600
+    m = (t%3600)//60
+    s = (t%3600)%60
+    return '%dh:%dm:%ds'%(h,m,s)
