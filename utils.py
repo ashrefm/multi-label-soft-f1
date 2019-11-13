@@ -255,7 +255,7 @@ def perf_grid(ds, target, label_names, model, n_thresh=100):
             fn = np.count_nonzero((1-y_pred) * y)
             precision = tp / (tp + fp + 1e-16)
             recall = tp / (tp + fn + 1e-16)
-            f1 = 2 * precision * recall / (precision + recall + 1e-16)
+            f1 = 2*tp / (2*tp + fn + fp + 1e-16)
             tps.append(tp)
             fps.append(fp)
             fns.append(fn)
