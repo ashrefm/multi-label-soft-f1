@@ -177,8 +177,7 @@ def macro_bce(y, y_hat):
 def macro_double_soft_f1(y, y_hat):
     """Compute the macro soft F1-score as a cost (average 1 - soft-F1 across all labels).
     Use probability values instead of binary predictions.
-    This version uses the computation of soft-F1 for both positive and negative class
-    to get the cost for each label.
+    This version uses the computation of soft-F1 for both positive and negative class for each label.
     
     Args:
         y (int32 Tensor): targets array of shape (BATCH_SIZE, N_LABELS)
