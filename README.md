@@ -8,8 +8,8 @@ We can download a pre-trained feature extractor from TensorFlow Hub and attach a
 The model is trained in two ways: the classic "binary cross-entropy" loss is compared to a custom "macro soft-F1" loss designed to optimize directly the "macro F1-score". The benefits of the second method are demonstrated to be quite interesting.
 
 Please, check these two blog posts for a full description:
-* Multi-Label Image Classification in TensorFlow 2.0
-* The Unknown Benefit of using a Macro Soft-F1 Loss in Classification Systems
+* [Multi-Label Image Classification in TensorFlow 2.0](https://medium.com/@ashrefm/multi-label-image-classification-in-tensorflow-2-0-7d4cf8a4bc72)
+* [The Unknown Benefit of using a Macro Soft-F1 Loss in Classification Systems](https://medium.com/@ashrefm/the-unknown-benefits-of-using-a-soft-f1-loss-in-classification-systems-753902c0105d)
 
 
 # Install
