@@ -9,7 +9,7 @@ The model is trained in two ways: the classic "binary cross-entropy" loss is com
 
 Please, check these two blog posts for a full description:
 * [Multi-Label Image Classification in TensorFlow 2.0](https://medium.com/@ashrefm/multi-label-image-classification-in-tensorflow-2-0-7d4cf8a4bc72)
-* [The Unknown Benefit of using a Macro Soft-F1 Loss in Classification Systems](https://medium.com/@ashrefm/the-unknown-benefits-of-using-a-soft-f1-loss-in-classification-systems-753902c0105d)
+* [The Unknown Benefits of using a Macro Soft-F1 Loss in Classification Systems](https://medium.com/@ashrefm/the-unknown-benefits-of-using-a-soft-f1-loss-in-classification-systems-753902c0105d)
 
 
 # Install
