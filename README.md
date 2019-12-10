@@ -30,13 +30,14 @@ Activate the environment:
 $ source tf2env/bin/activate
 ```
 
-Install the necessary python packages (use the second command line for tensorflow-gpu)
+Install the necessary python packages (use the second command line for tensorflow-gpu).  
+For GPU training, you need Nvidia CUDA drivers on your machine. [TensorFlow GPU Support](https://www.tensorflow.org/install/gpu)
 ```
 $ pip install -r requirements.txt
 $ pip install -r requirements_gpu.txt
 ```
 
-Check the list of packages installed and that you have TensorFlow 2.0 among them.
+Check the list of packages installed and that you have TensorFlow 2.0 among them.  
 ```
 $ pip list
 ```
@@ -67,7 +68,7 @@ We recommend using a function called `download_parallel` that was prepared in th
 <img src="./img/posters_2x4.png" width="900">
 
 # Workflow
-You can walkthough the [tutorial notebook](https://github.com/ashrefm/multi-label-soft-f1/blob/master/Multi-Label%20Image%20Classification%20in%20TensorFlow%202.0.ipynb) and execute the following steps:
+You can go through the [tutorial notebook](https://github.com/ashrefm/multi-label-soft-f1/blob/master/Multi-Label%20Image%20Classification%20in%20TensorFlow%202.0.ipynb) and execute the following steps:
 * Data collection
 * Data preparation
 * Create a fast input pipeline in TensorFlow
